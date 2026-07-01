@@ -15,3 +15,9 @@ yarn-error.log
 .idea/
 .DS_Store
 .env
+
+# Yarn Berry (node-modules linker): keep the pinned release binary, ignore
+# the local install-state cache and PnP artifacts.
+.yarn/*
+!.yarn/releases
+.pnp.*

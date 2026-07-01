@@ -1,0 +1,17 @@
+/dist
+/dist-prod
+/node_modules
+/coverage
+/logs
+/public/output
+/public/temp
+/public/uploads
+/home
+/puck
+/prisma/generated
+
+package-lock.json
+yarn-error.log
+.idea/
+.DS_Store
+.env

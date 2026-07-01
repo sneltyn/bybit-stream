@@ -1,0 +1,58 @@
+configs:
+  pairs:
+    file: ./pairs.json
+
+services:
+  binance-stream:
+    image: ghcr.io/digwex/binance-stream:main
+    restart: unless-stopped
+    stop_grace_period: 15s
+    deploy:
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 0
+        window: 60s
+    configs:
+      - source: pairs
+        target: /app/pairs.json
+    environment:
+      NODE_ENV: ${NODE_ENV:-production}
+      APP_NAME: ${APP_NAME:-binance-stream}
+      NATS_SERVERS: ${NATS_SERVERS:-nats://nats:4222}
+      NATS_NAME: ${NATS_NAME:-binance-stream}
+      NATS_USER: ${NATS_USER:-}
+      NATS_PASSWORD: ${NATS_PASSWORD:-}
+      NATS_TOKEN: ${NATS_TOKEN:-}
+      NATS_CREDS_FILE: ${NATS_CREDS_FILE:-}
+      NATS_SUBJECT: ${NATS_SUBJECT:-prices.crypto.binance}
+      NATS_SUBJECT_CRYPTO: ${NATS_SUBJECT_CRYPTO:-prices.crypto.binance}
+      NATS_SUBJECT_STOCKS: ${NATS_SUBJECT_STOCKS:-prices.stocks.binance}
+      NATS_SUBJECT_COMMODITIES: ${NATS_SUBJECT_COMMODITIES:-prices.commodities.binance}
+      NATS_STREAM_NAME: ${NATS_STREAM_NAME:-PRICES}
+      NATS_STREAM_MAX_AGE_MS: ${NATS_STREAM_MAX_AGE_MS:-300000}
+      NATS_STREAM_MAX_BYTES: ${NATS_STREAM_MAX_BYTES:-1073741824}
+      NATS_STREAM_REPLICAS: ${NATS_STREAM_REPLICAS:-1}
+    depends_on:
+      nats:
+        condition: service_healthy
+
+  nats:
+    image: nats:2.10-alpine
+    restart: unless-stopped
+    command:
+      - "-js"
+      - "-sd"
+      - "/data"
+      - "-m"
+      - "8222"
+    volumes:
+      - nats-data:/data
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8222/healthz"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+volumes:
+  nats-data:

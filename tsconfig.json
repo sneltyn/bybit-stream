@@ -1,0 +1,45 @@
+{
+  "compilerOptions": {
+    /* Language and Environment */
+    "target": "ESNext",
+    "lib": ["es5", "es6"],
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    /* Modules */
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "baseUrl": "src/",
+    "paths": {
+      "@apps/*": ["apps/*"],
+      "@core/*": ["core/*"],
+      "@config/*": ["config/*"],
+      "@routes/*": ["routes/*"],
+      "@locales/*": ["locales/*"],
+      "@middlewares/*": ["middlewares/*"],
+      "@prisma": ["../../bf-exchange/prisma/generated/prisma-exchange"]
+    },
+    "typeRoots": ["./src/types"],
+
+    /* JavaScript Support */
+    "allowJs": true,
+
+    /* Emit */
+    "outDir": "./dist",
+    "downlevelIteration": true,
+
+    /* Interop Constraints */
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+
+    /* Type Checking */
+    "strict": true,
+    "strictPropertyInitialization": false,
+    "useDefineForClassFields": false,
+
+    /* Completeness */
+    "skipLibCheck": true
+  },
+  "include": ["src/**/*", "test.js"],
+  "exclude": ["dist", "node_modules"]
+}
